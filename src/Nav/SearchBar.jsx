@@ -1,7 +1,6 @@
 import React from "react";
 
-export default function SearchBar() {
-  const [query, setQuery] = React.useState("");
+export default function SearchBar({ query, setQuery }) {
   return (
     <input
       className="search"

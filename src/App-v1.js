@@ -8,8 +8,6 @@ import Box from "./Box";
 import WatchedSummary from "./WatchedSummary";
 import WatchedMoviesList from "./WatchedMoviesList";
 import MovieList from "./MovieList";
-import Loader from "./Loader";
-import Error from "./Error";
 const tempWatchedData = [
   {
     imdbID: "tt1375666",
@@ -32,40 +30,33 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
+const tempMovieData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0133093",
+    Title: "The Matrix",
+    Year: "1999",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt6751668",
+    Title: "Parasite",
+    Year: "2019",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+  },
+];
 
-const KEY = "e449bbf5";
-const query = "intssw";
 export default function App() {
-  const [movies, setMovies] = React.useState([]);
-  const [watched, setWatched] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
-  React.useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`
-        );
-
-        if (!res.ok) throw new Error("Something went wrong!!!");
-
-        const data = await res.json();
-
-        if (data.Response === "False") {
-          throw new Error(data.Error || "aAAAA");
-        }
-
-        setMovies(data.Search);
-      } catch (e) {
-        setError(e.message || "Something went wrong!!!");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchMovies();
-  }, []);
-
+  const [movies, setMovies] = React.useState(tempMovieData);
+  const [watched, setWatched] = React.useState(tempWatchedData);
   return (
     <>
       <NavBar>
@@ -75,9 +66,7 @@ export default function App() {
       </NavBar>
       <Main>
         <Box>
-          {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
-          {error && <Error message={error} />}
+          <MovieList movies={movies} />
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
